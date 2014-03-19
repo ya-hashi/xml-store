@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ccm:Editor xmlns:ccm="http://cloudconductor.org/namespaces/ccm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ccm:Nodes>
+    <ccm:Node id="cloud1" xsi:type="ccm:Infrastructure">
+      <ccm:x>140.5</ccm:x>
+      <ccm:y>90.5</ccm:y>
+      <ccm:z>0</ccm:z>
+      <ccm:width>790</ccm:width>
+      <ccm:height>250</ccm:height>
+    </ccm:Node>
+    <ccm:Node id="private_net1" xsi:type="ccm:Network">
+      <ccm:x>150.5</ccm:x>
+      <ccm:y>130.5</ccm:y>
+      <ccm:z>1</ccm:z>
+      <ccm:children>4</ccm:children>
+    </ccm:Node>
+    <ccm:Node id="small-server-web" xsi:type="ccm:Machine">
+      <ccm:x>170.5</ccm:x>
+      <ccm:y>170.5</ccm:y>
+      <ccm:z>2</ccm:z>
+    </ccm:Node>
+    <ccm:Node id="medium-server" xsi:type="ccm:Machine">
+      <ccm:x>320.5</ccm:x>
+      <ccm:y>170.5</ccm:y>
+      <ccm:z>3</ccm:z>
+    </ccm:Node>
+    <ccm:Node id="large-server" xsi:type="ccm:Machine">
+      <ccm:x>470.5</ccm:x>
+      <ccm:y>170.5</ccm:y>
+      <ccm:z>4</ccm:z>
+    </ccm:Node>
+    <ccm:Node id="small-server-zabbix" xsi:type="ccm:Machine">
+      <ccm:x>620.5</ccm:x>
+      <ccm:y>170.5</ccm:y>
+      <ccm:z>5</ccm:z>
+    </ccm:Node>
+    <ccm:Node id="test_vol1" xsi:type="ccm:Volume">
+      <ccm:x>530.5</ccm:x>
+      <ccm:y>270.5</ccm:y>
+      <ccm:z>7</ccm:z>
+    </ccm:Node>
+  </ccm:Nodes>
+  <ccm:Links>
+    <ccm:Link>
+      <ccm:Source ref="private_net1">
+        <ccm:Selector>g:nth-child(1) g:nth-child(3) circle:nth-child(1)</ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="small-server-web">
+        <ccm:Selector>.magnet</ccm:Selector>
+      </ccm:Target>
+    </ccm:Link>
+    <ccm:Link>
+      <ccm:Source ref="private_net1">
+        <ccm:Selector>g:nth-child(1) g:nth-child(3) circle:nth-child(2)</ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="medium-server">
+        <ccm:Selector>.magnet</ccm:Selector>
+      </ccm:Target>
+    </ccm:Link>
+    <ccm:Link>
+      <ccm:Source ref="private_net1">
+        <ccm:Selector>g:nth-child(1) g:nth-child(3) circle:nth-child(3)</ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="large-server">
+        <ccm:Selector>.magnet</ccm:Selector>
+      </ccm:Target>
+    </ccm:Link>
+    <ccm:Link>
+      <ccm:Source ref="private_net1">
+        <ccm:Selector>g:nth-child(1) g:nth-child(3) circle:nth-child(4)</ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="small-server-zabbix">
+        <ccm:Selector>.magnet</ccm:Selector>
+      </ccm:Target>
+    </ccm:Link>
+    <ccm:Link>
+      <ccm:Source ref="large-server">
+        <ccm:Selector>g:nth-child(1) g:nth-child(2)</ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="test_vol1" />
+    </ccm:Link>
+  </ccm:Links>
+</ccm:Editor>
