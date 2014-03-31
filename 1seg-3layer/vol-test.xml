@@ -75,7 +75,7 @@
       </cc:NetworkInterfaces>
       <cc:Volumes>
         <cc:Volume ref="volume_1">
-          <cc:MountPoint>/data</cc:MountPoint>
+          <cc:MountPoint>/data_zabi</cc:MountPoint>
         </cc:Volume>
       </cc:Volumes>
       <cc:MachineFilters>

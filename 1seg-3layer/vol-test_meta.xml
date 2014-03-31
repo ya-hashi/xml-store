@@ -87,7 +87,7 @@
     <ccm:Link>
       <ccm:Source ref="volume_1" />
       <ccm:Target ref="small-server-zabbix">
-        <ccm:Selector>g:nth-child(1) g:nth-child(2)   </ccm:Selector>
+        <ccm:Selector>g:nth-child(1) g:nth-child(2)</ccm:Selector>
       </ccm:Target>
     </ccm:Link>
   </ccm:Links>
