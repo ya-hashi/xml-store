@@ -16,7 +16,7 @@
     </ccm:Node>
     <ccm:Node id="small-server-web" xsi:type="ccm:Machine">
       <ccm:x>170.5</ccm:x>
-      <ccm:y>170.5</ccm:y>
+      <ccm:y>180.5</ccm:y>
       <ccm:z>2</ccm:z>
     </ccm:Node>
     <ccm:Node id="medium-server" xsi:type="ccm:Machine">
