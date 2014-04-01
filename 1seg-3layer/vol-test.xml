@@ -75,7 +75,10 @@
       </cc:NetworkInterfaces>
       <cc:Volumes>
         <cc:Volume ref="volume_1">
-          <cc:MountPoint>/data_zabi</cc:MountPoint>
+          <cc:MountPoint>/data_zabi1</cc:MountPoint>
+        </cc:Volume>
+        <cc:Volume ref="volume_2">
+          <cc:MountPoint>/data_zabi2</cc:MountPoint>
         </cc:Volume>
       </cc:Volumes>
       <cc:MachineFilters>
@@ -253,6 +256,10 @@
     </cc:Volume>
     <cc:Volume id="volume_1">
       <cc:Size>2</cc:Size>
+      <cc:IOPS>low</cc:IOPS>
+    </cc:Volume>
+    <cc:Volume id="volume_2">
+      <cc:Size>1</cc:Size>
       <cc:IOPS>low</cc:IOPS>
     </cc:Volume>
   </cc:Volumes>

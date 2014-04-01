@@ -44,6 +44,11 @@
       <ccm:y>267.5</ccm:y>
       <ccm:z>12</ccm:z>
     </ccm:Node>
+    <ccm:Node id="volume_2" xsi:type="ccm:Volume">
+      <ccm:x>833.5</ccm:x>
+      <ccm:y>266.5</ccm:y>
+      <ccm:z>14</ccm:z>
+    </ccm:Node>
   </ccm:Nodes>
   <ccm:Links>
     <ccm:Link>
@@ -89,6 +94,12 @@
       <ccm:Target ref="small-server-zabbix">
         <ccm:Selector>g:nth-child(1) g:nth-child(2)</ccm:Selector>
       </ccm:Target>
+    </ccm:Link>
+    <ccm:Link>
+      <ccm:Source ref="small-server-zabbix">
+        <ccm:Selector>g:nth-child(1) g:nth-child(2)   </ccm:Selector>
+      </ccm:Source>
+      <ccm:Target ref="volume_2" />
     </ccm:Link>
   </ccm:Links>
 </ccm:Editor>
