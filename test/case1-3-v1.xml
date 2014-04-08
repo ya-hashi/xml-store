@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cc:System xmlns:cc="http://cloudconductor.org/namespaces/cc">
+  <cc:Name>1-segment 3-layer model</cc:Name>
+  <cc:Description>WEB/AP/DB 3-layer model</cc:Description>
+  <cc:Author>TIS Inc.</cc:Author>
+  <cc:Date>2013-12-27</cc:Date>
+  <cc:License>Apache License 2.0</cc:License>
+  <cc:Infrastructures>
+    <cc:Infrastructure id="cloud1">
+      <cc:Name>private cloud A</cc:Name>
+    </cc:Infrastructure>
+  </cc:Infrastructures>
+  <cc:Machines>
+    <cc:Machine id="small-server-web">
+      <cc:Name>Small Server</cc:Name>
+      <cc:SpecType>small</cc:SpecType>
+      <cc:OSType>CentOS</cc:OSType>
+      <cc:OSVersion>6.5</cc:OSVersion>
+      <cc:NetworkInterfaces>
+        <cc:NetworkInterface ref="private_net_g1" />
+      </cc:NetworkInterfaces>
+      <cc:MachineFilters>
+        <cc:MachineFilter ref="sec_in_80" />
+        <cc:MachineFilter ref="sec_in_443" />
+        <cc:MachineFilter ref="sec_in_all_deny" />
+        <cc:MachineFilter ref="sec_out_all_allow" />
+        <cc:MachineFilter ref="sec_in_10050" />
+        <cc:MachineFilter ref="sec_in_22_internal" />
+      </cc:MachineFilters>
+    </cc:Machine>
+    <cc:Machine id="medium-server">
+      <cc:Name>Medium Server</cc:Name>
+      <cc:SpecType>small</cc:SpecType>
+      <cc:OSType>CentOS</cc:OSType>
+      <cc:OSVersion>6.5</cc:OSVersion>
+      <cc:NetworkInterfaces>
+        <cc:NetworkInterface ref="private_net_g1" />
+      </cc:NetworkInterfaces>
+      <cc:MachineFilters>
+        <cc:MachineFilter ref="sec_in_all_deny" />
+        <cc:MachineFilter ref="sec_out_all_allow" />
+        <cc:MachineFilter ref="sec_in_10050" />
+        <cc:MachineFilter ref="sec_in_8080" />
+        <cc:MachineFilter ref="sec_in_22_internal" />
+      </cc:MachineFilters>
+    </cc:Machine>
+    <cc:Machine id="large-server">
+      <cc:Name>Large Server</cc:Name>
+      <cc:SpecType>small</cc:SpecType>
+      <cc:OSType>CentOS</cc:OSType>
+      <cc:OSVersion>6.5</cc:OSVersion>
+      <cc:NetworkInterfaces>
+        <cc:NetworkInterface ref="private_net_g1" />
+      </cc:NetworkInterfaces>
+      <cc:Volumes>
+        <cc:Volume ref="test_vol1">
+          <cc:MountPoint>/data</cc:MountPoint>
+        </cc:Volume>
+      </cc:Volumes>
+      <cc:MachineFilters>
+        <cc:MachineFilter ref="sec_in_all_deny" />
+        <cc:MachineFilter ref="sec_out_all_allow" />
+        <cc:MachineFilter ref="sec_in_10050" />
+        <cc:MachineFilter ref="sec_in_5432" />
+        <cc:MachineFilter ref="sec_in_22_internal" />
+      </cc:MachineFilters>
+    </cc:Machine>
+    <cc:Machine id="small-server-zabbix">
+      <cc:Name>Small Server</cc:Name>
+      <cc:SpecType>small</cc:SpecType>
+      <cc:OSType>CentOS</cc:OSType>
+      <cc:OSVersion>6.5</cc:OSVersion>
+      <cc:NetworkInterfaces>
+        <cc:NetworkInterface ref="private_net_g1" />
+      </cc:NetworkInterfaces>
+      <cc:MachineFilters>
+        <cc:MachineFilter ref="sec_in_80" />
+        <cc:MachineFilter ref="sec_in_443" />
+        <cc:MachineFilter ref="sec_in_tcp_53" />
+        <cc:MachineFilter ref="sec_in_udp_53" />
+        <cc:MachineFilter ref="sec_in_10051" />
+        <cc:MachineFilter ref="sec_in_3128" />
+        <cc:MachineFilter ref="sec_in_all_deny" />
+        <cc:MachineFilter ref="sec_out_all_allow" />
+        <cc:MachineFilter ref="sec_in_22" />
+      </cc:MachineFilters>
+    </cc:Machine>
+  </cc:Machines>
+  <cc:MachineGroups>
+    <cc:MachineGroup id="web-server-g" ref="small-server-web">
+      <cc:Name>WEB Server Group</cc:Name>
+      <cc:Infrastructures>
+        <cc:Infrastructure ref="cloud1" />
+      </cc:Infrastructures>
+      <cc:Roles>
+        <cc:Role ref="web_role" />
+      </cc:Roles>
+      <cc:FloatingIP ref="eip1" />
+      <cc:NodeType>
+        <cc:Single />
+      </cc:NodeType>
+      <cc:Monitorings>
+        <cc:Monitoring ref="LinuxOS" />
+        <cc:Monitoring ref="Web" />
+      </cc:Monitorings>
+    </cc:MachineGroup>
+    <cc:MachineGroup id="ap-server-g" ref="medium-server">
+      <cc:Name>AP Server Group</cc:Name>
+      <cc:Infrastructures>
+        <cc:Infrastructure ref="cloud1" />
+      </cc:Infrastructures>
+      <cc:Roles>
+        <cc:Role ref="ap_role" />
+      </cc:Roles>
+      <cc:NodeType>
+        <cc:Single />
+      </cc:NodeType>
+      <cc:Monitorings>
+        <cc:Monitoring ref="LinuxOS" />
+        <cc:Monitoring ref="AP" />
+      </cc:Monitorings>
+    </cc:MachineGroup>
+    <cc:MachineGroup id="db-server-g" ref="large-server">
+      <cc:Name>DB Server Group</cc:Name>
+      <cc:Infrastructures>
+        <cc:Infrastructure ref="cloud1" />
+      </cc:Infrastructures>
+      <cc:Roles>
+        <cc:Role ref="db_role" />
+      </cc:Roles>
+      <cc:NodeType>
+        <cc:Single />
+      </cc:NodeType>
+      <cc:Monitorings>
+        <cc:Monitoring ref="LinuxOS" />
+        <cc:Monitoring ref="DB" />
+      </cc:Monitorings>
+    </cc:MachineGroup>
+    <cc:MachineGroup id="zabbix-server-g" ref="small-server-zabbix">
+      <cc:Name>Zabbix Server</cc:Name>
+      <cc:Infrastructures>
+        <cc:Infrastructure ref="cloud1" />
+      </cc:Infrastructures>
+      <cc:Roles>
+        <cc:Role ref="zabbix_dns_role" />
+      </cc:Roles>
+      <cc:FloatingIP ref="eip2" />
+      <cc:NodeType>
+        <cc:Single />
+      </cc:NodeType>
+      <cc:Monitorings>
+        <cc:Monitoring ref="LinuxOS" />
+      </cc:Monitorings>
+    </cc:MachineGroup>
+  </cc:MachineGroups>
+  <cc:Middlewares>
+    <cc:Middleware type="chef" id="apache_cookbook">
+      <cc:Name>Apache2</cc:Name>
+      <cc:Repository>https://github.com/opscode-cookbooks/apache2.git</cc:Repository>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="tomcat_cookbook">
+      <cc:Name>Tomcat6</cc:Name>
+      <cc:Repository>https://github.com/opscode-cookbooks/tomcat.git</cc:Repository>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="postgresql_cookbook">
+      <cc:Name>PostgreSQL</cc:Name>
+      <cc:Repository>https://github.com/hw-cookbooks/postgresql.git</cc:Repository>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="zabbix_cookbook">
+      <cc:Name>Zabbix</cc:Name>
+      <cc:Repository>https://github.com/cloudconductor/cookbooks.git</cc:Repository>
+      <cc:CookbookName>cc-zabbix</cc:CookbookName>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="bind_cookbook">
+      <cc:Name>Bind 9</cc:Name>
+      <cc:Repository>https://github.com/cloudconductor/cookbooks.git</cc:Repository>
+      <cc:CookbookName>cc-bind</cc:CookbookName>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="deploy_cookbook">
+      <cc:Name>Deploy</cc:Name>
+      <cc:Repository>https://github.com/cloudconductor/cookbooks.git</cc:Repository>
+      <cc:CookbookName>cc-deploy</cc:CookbookName>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="nsupdate_cookbook">
+      <cc:Name>NSUpdate</cc:Name>
+      <cc:Repository>https://github.com/cloudconductor/cookbooks.git</cc:Repository>
+      <cc:CookbookName>cc-nsupdate</cc:CookbookName>
+    </cc:Middleware>
+    <cc:Middleware type="chef" id="application_java_cookbook">
+      <cc:Name>Application Java</cc:Name>
+      <cc:Repository>https://github.com/cloudconductor/application_java.git</cc:Repository>
+    </cc:Middleware>
+  </cc:Middlewares>
+  <cc:Roles>
+    <cc:Role type="chef" id="web_role">
+      <cc:Name>Web Server Role</cc:Name>
+      <cc:Middlewares>
+        <cc:Middleware ref="apache_cookbook" />
+        <cc:Middleware ref="zabbix_cookbook" />
+        <cc:Middleware ref="deploy_cookbook" />
+        <cc:Middleware ref="nsupdate_cookbook" />
+      </cc:Middlewares>
+      <cc:Import type="chef_runlist">https://raw.github.com/cloudconductor/chef-parameters/master/chef_runlist_apache.json</cc:Import>
+      <cc:Import type="chef_attribute">https://raw.github.com/cloudconductor/chef-parameters/master/chef_attr_apache.json</cc:Import>
+      <cc:UserInputKeys>
+        <cc:UserInputKey>apache.contact</cc:UserInputKey>
+      </cc:UserInputKeys>
+    </cc:Role>
+    <cc:Role type="chef" id="ap_role">
+      <cc:Name>AP Server Role</cc:Name>
+      <cc:Middlewares>
+        <cc:Middleware ref="tomcat_cookbook" />
+        <cc:Middleware ref="zabbix_cookbook" />
+        <cc:Middleware ref="deploy_cookbook" />
+        <cc:Middleware ref="nsupdate_cookbook" />
+        <cc:Middleware ref="application_java_cookbook" />
+      </cc:Middlewares>
+      <cc:Import type="chef_runlist">https://raw.github.com/cloudconductor/chef-parameters/master/chef_runlist_tomcat.json</cc:Import>
+      <cc:Import type="chef_attribute">https://raw.github.com/cloudconductor/chef-parameters/master/chef_attr_tomcat.json</cc:Import>
+    </cc:Role>
+    <cc:Role type="chef" id="db_role">
+      <cc:Name>DB Server Role</cc:Name>
+      <cc:Middlewares>
+        <cc:Middleware ref="postgresql_cookbook" />
+        <cc:Middleware ref="zabbix_cookbook" />
+        <cc:Middleware ref="deploy_cookbook" />
+        <cc:Middleware ref="nsupdate_cookbook" />
+      </cc:Middlewares>
+      <cc:Import type="chef_runlist">https://raw.github.com/cloudconductor/chef-parameters/master/chef_runlist_postgresql.json</cc:Import>
+      <cc:Import type="chef_attribute">https://raw.github.com/cloudconductor/chef-parameters/master/chef_attr_postgresql.json</cc:Import>
+    </cc:Role>
+    <cc:Role type="chef" id="zabbix_dns_role">
+      <cc:Name>Monitoring Server Role</cc:Name>
+      <cc:Middlewares>
+        <cc:Middleware ref="zabbix_cookbook" />
+        <cc:Middleware ref="bind_cookbook" />
+        <cc:Middleware ref="deploy_cookbook" />
+        <cc:Middleware ref="nsupdate_cookbook" />
+      </cc:Middlewares>
+      <cc:Import type="chef_runlist">https://raw.github.com/cloudconductor/chef-parameters/master/chef_runlist_zabbix.json</cc:Import>
+      <cc:Import type="chef_attribute">https://raw.github.com/cloudconductor/chef-parameters/master/chef_attr_zabbix.json</cc:Import>
+    </cc:Role>
+  </cc:Roles>
+  <cc:Volumes>
+    <cc:Volume id="test_vol1">
+      <cc:Size>1</cc:Size>
+      <cc:IOPS>low</cc:IOPS>
+    </cc:Volume>
+  </cc:Volumes>
+  <cc:MachineFilters>
+    <cc:MachineFilter id="sec_in_80">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>80</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_443">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>443</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_all_deny">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>all</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>deny</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_out_all_allow">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>all</cc:Port>
+      <cc:Direction>egress</cc:Direction>
+      <cc:Destination>all</cc:Destination>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_10050">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>10050</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_22_internal">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>22</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_8080">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>8080</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_5432">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>5432</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_tcp_53">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>53</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_udp_53">
+      <cc:Protocol>udp</cc:Protocol>
+      <cc:Port>53</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_10051">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>10051</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_3128">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>3128</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source ref="private_net_g1" />
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+    <cc:MachineFilter id="sec_in_22">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>22</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:MachineFilter>
+  </cc:MachineFilters>
+  <cc:Networks>
+    <cc:Network id="private_net1">
+      <cc:Name>private network 1</cc:Name>
+    </cc:Network>
+  </cc:Networks>
+  <cc:NetworkGroups>
+    <cc:NetworkGroup id="private_net_g1">
+      <cc:Name>private network group 1</cc:Name>
+      <cc:Networks>
+        <cc:Network ref="private_net1">
+          <cc:Infrastructures>
+            <cc:Infrastructure ref="cloud1" />
+          </cc:Infrastructures>
+        </cc:Network>
+      </cc:Networks>
+      <cc:NetworkFilters>
+        <cc:NetworkFilter ref="acl_in_80" />
+        <cc:NetworkFilter ref="acl_in_all_deny" />
+        <cc:NetworkFilter ref="acl_out_all_allow" />
+      </cc:NetworkFilters>
+    </cc:NetworkGroup>
+  </cc:NetworkGroups>
+  <cc:NetworkFilters>
+    <cc:NetworkFilter id="acl_in_80">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>80</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:NetworkFilter>
+    <cc:NetworkFilter id="acl_in_all_deny">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>all</cc:Port>
+      <cc:Direction>ingress</cc:Direction>
+      <cc:Source>all</cc:Source>
+      <cc:RuleAction>deny</cc:RuleAction>
+    </cc:NetworkFilter>
+    <cc:NetworkFilter id="acl_out_all_allow">
+      <cc:Protocol>tcp</cc:Protocol>
+      <cc:Port>all</cc:Port>
+      <cc:Direction>egress</cc:Direction>
+      <cc:Destination>all</cc:Destination>
+      <cc:RuleAction>allow</cc:RuleAction>
+    </cc:NetworkFilter>
+  </cc:NetworkFilters>
+  <cc:FloatingIPs>
+    <cc:FloatingIP id="eip1">
+      <cc:Name>eip1</cc:Name>
+    </cc:FloatingIP>
+    <cc:FloatingIP id="eip2">
+      <cc:Name>eip2</cc:Name>
+    </cc:FloatingIP>
+  </cc:FloatingIPs>
+  <cc:Monitorings>
+    <cc:Monitoring id="LinuxOS">
+      <cc:Name>LinuxOS Monitoring</cc:Name>
+      <cc:Import filetype="zabbix">https://raw2.github.com/cloudconductor/zabbix-templates/master/zbx_os.xml</cc:Import>
+    </cc:Monitoring>
+    <cc:Monitoring id="Web">
+      <cc:Name>Web Monitoring</cc:Name>
+      <cc:Import filetype="zabbix">https://raw2.github.com/cloudconductor/zabbix-templates/master/zbx_apache.xml</cc:Import>
+    </cc:Monitoring>
+    <cc:Monitoring id="AP">
+      <cc:Name>AP Monitoring</cc:Name>
+      <cc:Import filetype="zabbix">https://raw2.github.com/cloudconductor/zabbix-templates/master/zbx_tomcat.xml</cc:Import>
+    </cc:Monitoring>
+    <cc:Monitoring id="DB">
+      <cc:Name>DB Monitoring</cc:Name>
+      <cc:Import filetype="zabbix">https://raw2.github.com/cloudconductor/zabbix-templates/master/zbx_postgresql.xml</cc:Import>
+    </cc:Monitoring>
+  </cc:Monitorings>
+</cc:System>
